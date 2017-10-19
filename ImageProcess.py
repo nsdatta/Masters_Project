@@ -12,13 +12,16 @@ LR = 1e-3
 MODEL_NAME = 'vehicle-{}-{}.model'.format(LR, '2conv-basic') # just so we remember which saved model is which, sizes must match
 
 def label_img(img):
+   # print img
     word_label = img.split('_')[-2]
-    # conversion to one-hot array [Bike,Car,Truck]
+    
+# conversion to one-hot array [Car,Truck, Bike]
    
     if word_label == 'Bik': return [1,0,0]
     elif word_label == 'Car': return [0,1,0]
-    else word_label == 'Tru': return [0,0,1]
+    elif word_label == 'Tru': return [0,0,1]
 	
+
 def create_train_data():
     training_data = []
     for img in tqdm(os.listdir(TRAIN_DIR)):
@@ -45,3 +48,4 @@ def process_test_data():
     return testing_data
 	
 train_data = create_train_data()
+test_data = process_test_data()
