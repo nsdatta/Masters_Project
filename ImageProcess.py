@@ -17,7 +17,7 @@ def label_img(img):
    
     if word_label == 'Bik': return [1,0,0]
     elif word_label == 'Car': return [0,1,0]
-	  elif word_label == 'Tru': return [0,0,1]
+    else word_label == 'Tru': return [0,0,1]
 	
 def create_train_data():
     training_data = []
