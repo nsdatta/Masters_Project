@@ -7,24 +7,26 @@ import os                  # Support directory paths
 from random import shuffle # mixing up or currently ordered data that might lead our network astray in training.
 from tqdm import tqdm      # smart percentage bar for tasks. 
 
-TRAIN_DIR = '/home/ec2-user/image_data/Train'
-TEST_DIR = '/home/ec2-user/image_data/Valid'
-IMG_SIZE = 50
-LR = 1e-3
+# Source directories where Training and Test images are stored in EC2 instance
+TRAIN_DIR = '/home/ubuntu/src/datta_ms/Train'
+TEST_DIR = '/home/ubuntu/src/datta_ms/Test'
 
-MODEL_NAME = 'vehicle-{}-{}.model'.format(LR, '2conv-basic') # just so we remember which saved model is which, sizes must match
+IMG_SIZE = 200 # Image size 
 
+# Preparing the label for dataset
 def label_img(img):
-   # print img
+   # print img --> debug
    # label name is being sourced from first three letters of image name
     word_label = img.split('_')[-2]
     # print("Word label: ", word_label) --> for debug
-# conversion to one-hot array [Car,Truck, Bike]
+	
+	#conversion to one-hot array [Car,Truck, Bike]
    
     if word_label == 'Bik': return [0,0,1]
     elif word_label == 'car': return [0,1,0]
     elif word_label == 'Tru': return [1,0,0]
-	
+
+# Preparation of training data array 	
 
 def create_train_data():
     training_data = []
@@ -38,6 +40,8 @@ def create_train_data():
     shuffle(training_data)
     np.save('train_data.npy', training_data)
     return training_data
+
+# Preparation of test data array
 	
 def process_test_data():
     testing_data = []
@@ -56,4 +60,3 @@ train_data = create_train_data()
 print ("Training and validation data is created")
 test_data = process_test_data()
 print ("Testing data is created")
-
