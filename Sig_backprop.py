@@ -12,11 +12,13 @@ IMG_SIZE = 200
 
 train_data = np.load('train_data.npy')
 
+# Defiing the tensorflow graph
 a_0 = tf.placeholder(tf.float32, [None, IMG_SIZE*IMG_SIZE])
 print a_0
 y = tf.placeholder(tf.float32, [None, 3])
 print y
 
+# Number of neurons in the middle layers
 middle = 50
 
 w_1 = tf.Variable(tf.truncated_normal([IMG_SIZE*IMG_SIZE, middle]))
@@ -26,10 +28,13 @@ b_2 = tf.Variable(tf.truncated_normal([1, middle]))
 w_3 = tf.Variable(tf.truncated_normal([middle, 3]))
 b_3 = tf.Variable(tf.truncated_normal([1, 3]))
 
+# Defining sigmoid function = 1/(1+e^-x)
+
 def sigma(x):
     return tf.div(tf.constant(1.0),
                   tf.add(tf.constant(1.0), tf.exp(tf.negative(x))))
 
+# Setting up the forward propogation
 z_1 = tf.add(tf.matmul(a_0, w_1), b_1)
 a_1 = sigma(z_1)
 z_2 = tf.add(tf.matmul(a_1, w_2), b_2)
@@ -38,11 +43,15 @@ a_2 = sigma(z_2)
 z_3 = tf.add(tf.matmul(a_2, w_3), b_3)
 a_3 = sigma(z_3)
 
+# Preparing for back ward propogation
+
 diff = tf.subtract(a_3, y)
 
+# d/dx (sigmoid) = sigma(x) (1 - sigma(x))
 def sigmaprime(x):
     return tf.multiply(sigma(x), tf.subtract(tf.constant(1.0), sigma(x)))
 
+# Back propogation setup
 d_z_3 = tf.multiply(diff, sigmaprime(z_3))
 d_b_3 = d_z_3
 d_w_3 = tf.matmul(tf.transpose(a_2), d_z_3)
@@ -57,6 +66,7 @@ d_z_1 = tf.multiply(d_a_1, sigmaprime(z_1))
 d_b_1 = d_z_1
 d_w_1 = tf.matmul(tf.transpose(a_0), d_z_1)
 
+# Learning rate
 eta = tf.constant(0.005)
 step = [
     tf.assign(w_1,
@@ -76,14 +86,18 @@ step = [
                                tf.reduce_mean(d_b_3, axis=[0]))))
 ]
 
+# Measurement of error
 acct_mat = tf.equal(tf.argmax(a_3, 1), tf.argmax(y, 1))
 acct_res = tf.reduce_sum(tf.cast(acct_mat, tf.float32))
 
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
 
+# Preparing training & test data
 train = train_data[:-300]
 test = train_data[-300:]
+
+# Retrieve the values for training and testing
 
 X = np.array([i[0] for i in train]).reshape(-1,IMG_SIZE*IMG_SIZE)
 Y = [i[1] for i in train]
@@ -91,6 +105,7 @@ Y = [i[1] for i in train]
 test_x = np.array([i[0] for i in test]).reshape(-1,IMG_SIZE*IMG_SIZE)
 test_y = [i[1] for i in test]
 
+# Open the file to store the reults --> primarily plt_show() is not available in headless ubuntu on EC2 instance
 f = open("sig_backprop_result.txt", 'w')
 sys.stdout = f
 
