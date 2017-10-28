@@ -1,3 +1,4 @@
+# 
 # Building an algorithm based on back propagation usint Tensorflow : Sigmoid
 
 import tensorflow
@@ -17,13 +18,12 @@ y = tf.placeholder(tf.float32, [None, 3])
 print y
 
 middle = 50
-middle1 = 30
 
 w_1 = tf.Variable(tf.truncated_normal([IMG_SIZE*IMG_SIZE, middle]))
 b_1 = tf.Variable(tf.truncated_normal([1, middle]))
-w_2 = tf.Variable(tf.truncated_normal([middle, middle1]))
-b_2 = tf.Variable(tf.truncated_normal([1, middle1]))
-w_3 = tf.Variable(tf.truncated_normal([middle1, 3]))
+w_2 = tf.Variable(tf.truncated_normal([middle, middle]))
+b_2 = tf.Variable(tf.truncated_normal([1, middle]))
+w_3 = tf.Variable(tf.truncated_normal([middle, 3]))
 b_3 = tf.Variable(tf.truncated_normal([1, 3]))
 
 def sigma(x):
