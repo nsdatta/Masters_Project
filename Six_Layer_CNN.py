@@ -64,7 +64,7 @@ convnet = fully_connected(convnet, 3, activation='softmax')
 # Computing the loss using cross entropy
 convnet = regression(convnet, optimizer='adam', learning_rate=LR, loss='categorical_crossentropy', name='targets')
 
-model = tflearn.DNN(convnet, tensorboard_dir='log', verbose = '3')
+model = tflearn.DNN(convnet, tensorboard_dir='log', tensorboard_verbose = '3')
 
 if os.path.exists('{}.meta'.format(MODEL_NAME)):
     model.load(MODEL_NAME)
