@@ -1,3 +1,6 @@
+# Source code referenced from : https://pythonprogramming.net/convolutional-neural-network-kats-vs-dogs-machine-learning-tutorial/
+# Adapted to suit the given requirement
+
 import cv2                 # working with, mainly resizing, images
 import numpy as np         # dealing with arrays
 import os                  # dealing with directories
