@@ -1,4 +1,4 @@
-# 
+# Source code reference from http://blog.aloni.org/posts/backprop-with-tensorflow/
 # Building an algorithm based on back propagation usint Tensorflow : Sigmoid
 
 import tensorflow
