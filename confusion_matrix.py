@@ -16,6 +16,8 @@ from tqdm import tqdm
 from tflearn.layers.conv import conv_2d, max_pool_2d
 from tflearn.layers.core import input_data, dropout, fully_connected
 from tflearn.layers.estimator import regression
+from tflearn.data_preprocessing import ImagePreprocessing
+from tflearn.data_augmentation import ImageAugmentation
 
 IMG_SIZE = 200
 TEST_DIR = '/home/ubuntu/src/datta_ms/Test'
@@ -121,14 +123,14 @@ with open('true.txt','wb') as f:
     np.savetxt(f,y_true,fmt='%s',delimiter=',')
 
 y_pred = testlblpred_data()
-print y_pred
+#print y_pred
 
 #exit (0)
 with open('pred.txt','wb') as f:
     np.savetxt(f,y_pred,fmt='%s',delimiter=',')
 
-y_pred= np.genfromtxt("/home/sae2kor/Downloads/pred.txt",delimiter=",", dtype='str')
-y_true= np.genfromtxt("/home/sae2kor/Downloads/true.txt",delimiter=",", dtype='str')
+y_pred= np.genfromtxt("pred.txt",delimiter=",", dtype='str')
+y_true= np.genfromtxt("true.txt",delimiter=",", dtype='str')
 
 confusion_matrix = ConfusionMatrix(y_true, y_pred)
 print("Confusion matrix:\n%s" % confusion_matrix)
@@ -136,9 +138,3 @@ print("Confusion matrix:\n%s" % confusion_matrix)
 confusion_matrix.plot()
 plt.show()
       
-# Confusion matrix 
-confusion_matrix = ConfusionMatrix(y_true, y_pred)
-print("Confusion matrix:\n%s" % confusion_matrix)
-
-# Plotting confusion matrix
-confusion_matrix.plot()
