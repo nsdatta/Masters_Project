@@ -17,6 +17,17 @@ from tflearn.layers.conv import conv_2d, max_pool_2d
 from tflearn.layers.core import input_data, dropout, fully_connected
 from tflearn.layers.estimator import regression
 
+# Real-time data preprocessing, however not considered, due to memory overruns
+img_prep = ImagePreprocessing()
+img_prep.add_featurewise_zero_center()
+#img_prep.add_featurewise_stdnorm()
+
+# Real-time data augmentation
+img_aug = ImageAugmentation()
+img_aug.add_random_flip_leftright()
+img_aug.add_random_rotation(max_angle=25.)
+
+
 IMG_SIZE = 200
 TEST_DIR = '/home/ubuntu/src/datta_ms/Test'
 
