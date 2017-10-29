@@ -37,39 +37,44 @@ def label_img(img):
     elif word_label == 'car': return 'Car'
     elif word_label == 'Tru': return 'Truck'
 
-# Defining the network 
-convnet = input_data(shape=[None, IMG_SIZE, IMG_SIZE, 1], name='input')
+convnet = input_data(shape=[None, IMG_SIZE, IMG_SIZE, 1],data_augmentation=img_aug,  name='input')
 
+# Defining the convolution with ReLu activation and max pooling
 convnet = conv_2d(convnet, 32, 5, activation='relu')
-convnet = max_pool_2d(convnet, 5)
-
-convnet = conv_2d(convnet, 64, 5, activation='relu')
-convnet = max_pool_2d(convnet, 5)
-
-convnet = conv_2d(convnet, 128, 5, activation='relu')
-convnet = max_pool_2d(convnet, 5)
-
-convnet = conv_2d(convnet, 64, 5, activation='relu')
 convnet = max_pool_2d(convnet, 5)
 
 convnet = conv_2d(convnet, 32, 5, activation='relu')
 convnet = max_pool_2d(convnet, 5)
 
-convnet = conv_2d(convnet, 64, 5, activation='relu')
+convnet = conv_2d(convnet, 32, 5, activation='relu')
 convnet = max_pool_2d(convnet, 5)
 
-convnet = fully_connected(convnet, 1024, activation='relu')
+convnet = conv_2d(convnet, 32, 5, activation='relu')
+convnet = max_pool_2d(convnet, 5)
+
+convnet = conv_2d(convnet, 32, 5, activation='relu')
+convnet = max_pool_2d(convnet, 5)
+
+convnet = conv_2d(convnet, 32, 5, activation='relu')
+convnet = max_pool_2d(convnet, 5)
+
+# Defining the fully connected layer with the output of conoluvtion  with ReLu activation and max pooling
+convnet = fully_connected(convnet, 100, activation='relu')
+#Defining the drop out rate as 0.8 to avoid overfitting and make network more robust
 convnet = dropout(convnet, 0.8)
 
+# Output layer configuration with "softmax" activation
 convnet = fully_connected(convnet, 3, activation='softmax')
+
+# Defining the back propagation parameters with learning rate 0.001, gradient descent optimisation using "adaptive momentum"
+# Computing the loss using cross entropy
 convnet = regression(convnet, optimizer='adam', learning_rate=LR, loss='categorical_crossentropy', name='targets')
 
-model = tflearn.DNN(convnet, tensorboard_dir='log')
+model = tflearn.DNN(convnet, tensorboard_dir='log', tensorboard_verbose = '3')
 
-# Load the trained model 
 if os.path.exists('{}.meta'.format(MODEL_NAME)):
     model.load(MODEL_NAME)
-    print('model loaded!')
+print('model loaded!')
 
 # Labelling for the entire test data, i.e true data
 
