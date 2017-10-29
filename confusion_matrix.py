@@ -17,17 +17,6 @@ from tflearn.layers.conv import conv_2d, max_pool_2d
 from tflearn.layers.core import input_data, dropout, fully_connected
 from tflearn.layers.estimator import regression
 
-# Real-time data preprocessing, however not considered, due to memory overruns
-img_prep = ImagePreprocessing()
-img_prep.add_featurewise_zero_center()
-#img_prep.add_featurewise_stdnorm()
-
-# Real-time data augmentation
-img_aug = ImageAugmentation()
-img_aug.add_random_flip_leftright()
-img_aug.add_random_rotation(max_angle=25.)
-
-
 IMG_SIZE = 200
 TEST_DIR = '/home/ubuntu/src/datta_ms/Test'
 
@@ -48,7 +37,7 @@ def label_img(img):
     elif word_label == 'car': return 'Car'
     elif word_label == 'Tru': return 'Truck'
 
-convnet = input_data(shape=[None, IMG_SIZE, IMG_SIZE, 1],data_augmentation=img_aug,  name='input')
+convnet = input_data(shape=[None, IMG_SIZE, IMG_SIZE, 1],  name='input')
 
 # Defining the convolution with ReLu activation and max pooling
 convnet = conv_2d(convnet, 32, 5, activation='relu')
@@ -125,7 +114,7 @@ def testlblpred_data():
     return pred_data
 
 y_true = testlbltrue_data()
-print y_true
+#print y_true
 
 # Result is pushed to files 
 with open('true.txt','wb') as f:
@@ -138,6 +127,15 @@ print y_pred
 with open('pred.txt','wb') as f:
     np.savetxt(f,y_pred,fmt='%s',delimiter=',')
 
+y_pred= np.genfromtxt("/home/sae2kor/Downloads/pred.txt",delimiter=",", dtype='str')
+y_true= np.genfromtxt("/home/sae2kor/Downloads/true.txt",delimiter=",", dtype='str')
+
+confusion_matrix = ConfusionMatrix(y_true, y_pred)
+print("Confusion matrix:\n%s" % confusion_matrix)
+
+confusion_matrix.plot()
+plt.show()
+      
 # Confusion matrix 
 confusion_matrix = ConfusionMatrix(y_true, y_pred)
 print("Confusion matrix:\n%s" % confusion_matrix)
