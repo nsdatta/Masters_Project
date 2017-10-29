@@ -1,3 +1,7 @@
+# Source code referenced from : https://pythonprogramming.net/convolutional-neural-network-kats-vs-dogs-machine-learning-tutorial/
+# Adapted to suit the given requirement 
+# Confusion matrix reference from : http://pandas-ml.readthedocs.io/en/latest/conf_mat.html
+
 # importing matplot library for plotting function 
 import matplotlib
 matplotlib.use('Agg') # Support non interactive backends
